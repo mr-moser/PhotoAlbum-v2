@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UIPageControl *albomPageControl;
 @property (nonatomic, assign) BOOL isEditing;
 @property (nonatomic, strong) id senderForDeleteAlbom;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *butAddAlbom;
 
 @end
 
@@ -39,72 +40,17 @@
     [self.collectionView setPagingEnabled:YES]; //включение постраничной прокрутки
     [self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
 }
-#pragma mark Обработка запроса названия альбома
-//=============== Обработка запроса названия альбома
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex { //метод обработки информации из алерта
-    if (alertView.alertViewStyle == UIAlertViewStylePlainTextInput) {
-        if (buttonIndex == 1) { //если нажата 2 кнопка Создать
-            UITextField *textField = [alertView textFieldAtIndex:0]; //запись значения из текстового поля алерта
-            if (![textField.text isEqualToString:@""]) { //проверка, не пустое ли текстовое поле
-                MMalbom * albom = [[MMalbom alloc] init]; //создаём альбом
-                albom.albomImage = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка обложки
-                albom.albomImageFoto = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка фото в обложке
-                albom.albomLabel = [NSString stringWithFormat:@"%@", textField.text]; //название альбома
-                [[mySingleton arrayAlbom] insertObject:albom atIndex:0]; //запись в массив альбомов в singleton
-                [self addNewItemInSection]; //создание ячейки в self.collectionView
-            } else {
-                [self showAlertEmptyNameAlbom];
-            }
-        }
-    } else if (alertView.alertViewStyle == UIAlertViewStyleDefault) {
-         if (buttonIndex == 1) { //если нажата 2 кнопка Создать
-             [self deleteAlbomConfirm];
-         }
-    }
-}
-#pragma mark Запрос на подтверждение удаления
-//=============== Запрос на подтверждение удаления
-- (void) showAlertDeleteAlbomConfirm {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Удаление альбома" //определение всплывающего окна
-                                                        message:@"Вы действительно хотите удалить этот альбом?"
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Нет", @"Да", nil];
-    alertView.alertViewStyle = UIAlertViewStyleDefault; //определение стиля окна
-    [alertView show]; //вывод алерта на экран
-}
-#pragma mark Ошибка, если им альбома пустое
-//=============== Ошибка, если им альбома пустое
-- (void) showAlertEmptyNameAlbom {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Ошибка" //определение всплывающего окна
-                                                        message:@"Название альбома не может быть пустым"
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Ок", nil];
-    alertView.alertViewStyle = UIAlertViewStyleDefault; //определение стиля окна
-    [alertView show]; //вывод алерта на экран
-}
-#pragma mark Запрос названия альбома
-//=============== Запрос названия альбома
-- (IBAction) showAlertCreateAlbom {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Создание нового альбома" //определение всплывающего окна
-                                                        message:@"Введите название альбома"
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Отмена", @"Создать", nil];
-    alertView.alertViewStyle = UIAlertViewStylePlainTextInput; //определение стиля окна
-    [alertView show]; //вывод алерта на экран
-}
 #pragma mark Добавление нового альбома
 //=============== Добавление нового альбома
 - (void) addNewItemInSection { //создание ячейки в self.collectionView
     [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:0 inSection:0]]];
     [self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
 }
-#pragma mark Клик по элементу collectionView
+#pragma mark Клик по элементу collectionView - отключение редактирования
 //=============== Клик по элементу collectionView
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     isEditing = false; //включен ли режим редактирования
+    self.butAddAlbom.enabled = true; //включение кнопки добавления альбома
     NSArray * arr = self.collectionView.subviews; //массив всех ячеек в self.collectionView
     for (int i = 0; i < [arr count]; i++) {
         if ([[arr objectAtIndex:i] isKindOfClass:[MMalbomCell class]]) //если ячейки является классом MMalbomCell
@@ -160,11 +106,16 @@
     [[mySingleton arrayAlbom] removeObjectAtIndex:indexPath.row];
     [self.collectionView deleteItemsAtIndexPaths:[NSArray arrayWithObject:indexPath]];
     [self updateControlPageNumber];
+    if ([[mySingleton arrayAlbom] count] == 0){
+        self.butAddAlbom.enabled = true; //включение кнопки добавления альбома
+        isEditing = false; //включен ли режим редактирования
+    }
 }
-#pragma mark Обработка длинного нажатия на ячейку
+#pragma mark Обработка длинного нажатия на ячейку - включение редактирования
 //=============== Обработка длинного нажатия на ячейку
 - (void)longPressCell:(UISwipeGestureRecognizer *)gesture {
     isEditing = true; //включен ли режим редактирования
+    self.butAddAlbom.enabled = false; //выключение кнопки добавления альбома
     if(UIGestureRecognizerStateBegan == gesture.state) {
         NSArray * arr = self.collectionView.subviews; //массив всех ячеек в self.collectionView
         for (int i = 0; i < [arr count]; i++) {
@@ -186,6 +137,63 @@
 - (void)updateControlPageNumber {
     self.albomPageControl.numberOfPages = ceil((double)[[mySingleton arrayAlbom] count] / 4); // округление к большему для кол-ва страниц
 }
+#pragma mark Обработка запроса названия альбома
+//=============== Обработка запроса названия альбома
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex { //метод обработки информации из алерта
+    if (alertView.alertViewStyle == UIAlertViewStylePlainTextInput) {
+        if (buttonIndex == 1) { //если нажата 2 кнопка Создать
+            UITextField *textField = [alertView textFieldAtIndex:0]; //запись значения из текстового поля алерта
+            if (![textField.text isEqualToString:@""]) { //проверка, не пустое ли текстовое поле
+                MMalbom * albom = [[MMalbom alloc] init]; //создаём альбом
+                albom.albomImage = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка обложки
+                albom.albomImageFoto = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка фото в обложке
+                albom.albomLabel = [NSString stringWithFormat:@"%@", textField.text]; //название альбома
+                [[mySingleton arrayAlbom] insertObject:albom atIndex:0]; //запись в массив альбомов в singleton
+                [self addNewItemInSection]; //создание ячейки в self.collectionView
+            } else {
+                [self showAlertEmptyNameAlbom];
+            }
+        }
+    } else if (alertView.alertViewStyle == UIAlertViewStyleDefault) {
+        if (buttonIndex == 1) { //если нажата 2 кнопка Создать
+            [self deleteAlbomConfirm];
+        }
+    }
+}
+#pragma mark Запрос на подтверждение удаления
+//=============== Запрос на подтверждение удаления
+- (void) showAlertDeleteAlbomConfirm {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Удаление альбома" //определение всплывающего окна
+                                                        message:@"Вы действительно хотите удалить этот альбом?"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Нет", @"Да", nil];
+    alertView.alertViewStyle = UIAlertViewStyleDefault; //определение стиля окна
+    [alertView show]; //вывод алерта на экран
+}
+#pragma mark Ошибка, если им альбома пустое
+//=============== Ошибка, если им альбома пустое
+- (void) showAlertEmptyNameAlbom {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Ошибка" //определение всплывающего окна
+                                                        message:@"Название альбома не может быть пустым"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Ок", nil];
+    alertView.alertViewStyle = UIAlertViewStyleDefault; //определение стиля окна
+    [alertView show]; //вывод алерта на экран
+}
+#pragma mark Запрос названия альбома
+//=============== Запрос названия альбома
+- (IBAction) showAlertCreateAlbom {
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Создание нового альбома" //определение всплывающего окна
+                                                        message:@"Введите название альбома"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Отмена", @"Создать", nil];
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput; //определение стиля окна
+    [alertView show]; //вывод алерта на экран
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
 }
