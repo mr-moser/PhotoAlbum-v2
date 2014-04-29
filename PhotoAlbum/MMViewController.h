@@ -12,6 +12,7 @@
 #import "MMalbomCell.h"
 #import "MMsingleton.h"
 #import "MMalbom.h"
+#import "KxMenu.h"
 
 @interface MMViewController : UIViewController <UICollectionViewDelegateFlowLayout, RNGridMenuDelegate>
 

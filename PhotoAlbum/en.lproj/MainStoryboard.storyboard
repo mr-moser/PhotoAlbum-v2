@@ -27,8 +27,9 @@
                         <rect key="frame" x="0.0" y="64" width="1024" height="704"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zED-ih-pQe"/>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="6AS-DF-50w">
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="680" id="zsB-1k-jmo"/>
                                 </constraints>
@@ -116,11 +117,15 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="xWw-nu-Q6Q" firstAttribute="trailing" secondItem="8dp-zH-qOG" secondAttribute="trailing" type="default" id="DP6-j8-QcV"/>
+                            <constraint firstItem="zED-ih-pQe" firstAttribute="leading" secondItem="8dp-zH-qOG" secondAttribute="leading" type="default" id="HZJ-Gf-Gh7"/>
+                            <constraint firstItem="zED-ih-pQe" firstAttribute="trailing" secondItem="8dp-zH-qOG" secondAttribute="trailing" type="default" id="ICb-25-4kx"/>
                             <constraint firstItem="xWw-nu-Q6Q" firstAttribute="leading" secondItem="8dp-zH-qOG" secondAttribute="leading" type="default" id="Jb4-no-OYe"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="trailing" secondItem="8dp-zH-qOG" secondAttribute="trailing" type="default" id="OGV-E5-u0c"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="leading" secondItem="8dp-zH-qOG" secondAttribute="leading" type="default" id="QAh-Np-BRf"/>
                             <constraint firstItem="xWw-nu-Q6Q" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" constant="673" id="YqM-lR-VGQ"/>
+                            <constraint firstItem="zED-ih-pQe" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" type="default" id="ghn-qi-BRS"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" type="default" id="qAr-uA-6XO"/>
+                            <constraint firstItem="zED-ih-pQe" firstAttribute="centerY" secondItem="8dp-zH-qOG" secondAttribute="centerY" type="default" id="sdT-5a-3oj"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     </view>
@@ -130,12 +135,19 @@
                                 <action selector="showAlertCreateAlbom" destination="X7g-9k-ig9" id="x3q-hr-5vr"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="menu" id="Pea-gs-MKp">
+                            <connections>
+                                <action selector="buttonMenuPress:" destination="X7g-9k-ig9" id="sA5-mu-faz"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
                         <outlet property="albomPageControl" destination="xWw-nu-Q6Q" id="xKS-TW-hKz"/>
+                        <outlet property="backgroundImage" destination="zED-ih-pQe" id="Vw6-48-Reb"/>
                         <outlet property="butAddAlbom" destination="7qP-0a-fFX" id="esc-7T-tLo"/>
+                        <outlet property="buttonMenu" destination="Pea-gs-MKp" id="3Yl-yr-0bF"/>
                         <outlet property="collectionView" destination="6AS-DF-50w" id="Kpo-Qi-l6L"/>
                     </connections>
                 </viewController>
@@ -169,9 +181,12 @@
         <class className="MMViewController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MMViewController.h"/>
             <relationships>
+                <relationship kind="action" name="buttonMenuPress:"/>
                 <relationship kind="action" name="showAlertCreateAlbom"/>
                 <relationship kind="outlet" name="albomPageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="backgroundImage" candidateClass="UIImageView"/>
                 <relationship kind="outlet" name="butAddAlbom" candidateClass="UIBarButtonItem"/>
+                <relationship kind="outlet" name="buttonMenu" candidateClass="UIBarButtonItem"/>
                 <relationship kind="outlet" name="collectionView" candidateClass="UICollectionView"/>
             </relationships>
         </class>

@@ -17,6 +17,12 @@
 @property (nonatomic, strong) id senderForDeleteAlbom;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *butAddAlbom;
 @property (nonatomic, assign) NSInteger indexSelectAlbomForCreate;
+@property (nonatomic, assign) NSInteger indexForGridMenu;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
+
+@property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
+
+- (IBAction)buttonMenuPress:(id)sender;
 
 @end
 
@@ -27,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     mySingleton = [MMsingleton sharedInstance]; //создание объекта singleton
-
+    
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init]; //создание UICollectionViewFlowLayout
     [flowLayout setItemSize:CGSizeMake(512, 335)]; //определение размеров
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal]; //определение типа прокрутки (горизонтальная)
@@ -38,9 +44,61 @@
     [self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
 }
 
+- (IBAction)buttonMenuPress:(id)sender {
+    NSArray *menuItems = [NSArray arrayWithObjects:
+                          [KxMenuItem menuItem:@"Изменить фон" image:nil target:self action:@selector(pushMenuItem:) idNumMenu:0],
+                          nil];
+    //KxMenuItem *first = menuItems[0];
+    //first.foreColor = [UIColor colorWithRed:47/255.0f green:112/255.0f blue:225/255.0f alpha:1.0];
+    //first.alignment = NSTextAlignmentCenter;
+    
+    UIView *view = [sender view];
+    CGRect frame = [view convertRect:view.bounds toView:self.view];
+    [KxMenu showMenuInView:self.view fromRect:CGRectMake(frame.origin.x, frame.origin.y + 10, frame.size.width, frame.size.height) menuItems:menuItems];
+}
+- (void) pushMenuItem:(id)sender {
+    switch ([sender idNumMenu]) {
+        case 0: [self showGridforBakcgroundAlbom:CGPointMake(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f)]; break;
+    }
+}
+#pragma mark Всплывающее окно выбора фона для альбомов
+//=============== Всплывающее окно шаблона альбомов
+- (void)showGridforBakcgroundAlbom:(CGPoint)point {
+    self.indexForGridMenu = 2;
+    NSInteger numberOfOptions = 9;
+    NSArray *items = [NSArray arrayWithObjects:
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon1.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon2.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon3.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon4.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon5.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon6.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon7.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon8.jpg"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"fon9.jpg"]],
+                      nil];
+    RNGridMenu *av = [[RNGridMenu alloc] initWithItems:[items subarrayWithRange:NSMakeRange(0, numberOfOptions)]];
+    av.delegate = self;
+    av.bounces = YES;
+    av.itemSize = CGSizeMake(200, 200);
+    av.cornerRadius = 10;
+    av.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.3];
+    av.animationDuration = 0.5;
+    
+    UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 44)];
+    header.text = @"Выберите обложку для альбома";
+    header.font = [UIFont boldSystemFontOfSize:18];
+    header.backgroundColor = [UIColor clearColor];
+    header.textColor = [UIColor whiteColor];
+    header.textAlignment = NSTextAlignmentCenter;
+    av.headerView = header;
+    
+    [av showInViewController:self center:point];
+}
 #pragma mark Всплывающее окно шаблона альбомов
 //=============== Всплывающее окно шаблона альбомов
 - (void)showGridWithHeaderFromPoint:(CGPoint)point {
+    self.indexForGridMenu = 1;
     NSInteger numberOfOptions = 4;
     NSArray *items = [NSArray arrayWithObjects:
                       [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"photoalbum-blue"]],
@@ -72,6 +130,7 @@
     [self showGridWithHeaderFromPoint:CGPointMake(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f)];
 }
 - (void)gridMenu:(RNGridMenu *)gridMenu willDismissWithSelectedItem:(RNGridMenuItem *)item atIndex:(NSInteger)itemIndex {
+    if (self.indexForGridMenu == 1) {
     indexSelectAlbomForCreate = itemIndex;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Создание нового альбома" //определение всплывающего окна
                                                         message:@"Введите название альбома"
@@ -80,10 +139,11 @@
                                               otherButtonTitles:@"Отмена", @"Создать", nil];
     alertView.alertViewStyle = UIAlertViewStylePlainTextInput; //определение стиля окна
     [alertView show]; //вывод алерта на экран
+    }
+    else if (self.indexForGridMenu == 2) {
+        self.backgroundImage.image = [UIImage imageNamed:[[mySingleton arrayImageForAlbumBackground] objectAtIndex:itemIndex]];
+    }
 }
-
-
-
 #pragma mark Добавление нового альбома
 //=============== Добавление нового альбома
 - (void) addNewItemInSection { //создание ячейки в self.collectionView
