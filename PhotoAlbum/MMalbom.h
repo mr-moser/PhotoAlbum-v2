@@ -14,4 +14,7 @@
 @property (nonatomic, strong) NSString *albomImage;
 @property (nonatomic, strong) NSString *albomImageFoto;
 
+- (id) initWithDictionary:(NSDictionary*)albumDictionary;
+- (NSDictionary*) convertToDictionary;
+
 @end

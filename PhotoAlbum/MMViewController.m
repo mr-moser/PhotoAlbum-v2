@@ -34,6 +34,8 @@
     [super viewDidLoad];
     mySingleton = [MMsingleton sharedInstance]; //создание объекта singleton
     
+    self.backgroundImage.image = [UIImage imageNamed:[mySingleton imageForAlbumBackground]];
+    
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init]; //создание UICollectionViewFlowLayout
     [flowLayout setItemSize:CGSizeMake(512, 335)]; //определение размеров
     [flowLayout setScrollDirection:UICollectionViewScrollDirectionHorizontal]; //определение типа прокрутки (горизонтальная)
@@ -142,6 +144,7 @@
     }
     else if (self.indexForGridMenu == 2) {
         self.backgroundImage.image = [UIImage imageNamed:[[mySingleton arrayImageForAlbumBackground] objectAtIndex:itemIndex]];
+        [mySingleton setImageForAlbumBackground:[[mySingleton arrayImageForAlbumBackground] objectAtIndex:itemIndex]];
     }
 }
 #pragma mark Добавление нового альбома
@@ -182,6 +185,7 @@
     cell.albomImage.image = [UIImage imageNamed: tempAlbom.albomImage]; // присвоене ячейке картинки альбома
     cell.albomImageFoto.image = [UIImage imageNamed: tempAlbom.albomImageFoto]; // присвоене ячейке картинки альбома
     cell.albomLabel.text = tempAlbom.albomLabel; // присвоене ячейке названия альбома
+    cell.albomLabel.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
     
     [cell.buttonClose addTarget:self action:@selector(buttonClosePress:) forControlEvents:UIControlEventTouchUpInside]; //привязка метода к кнопка закрытия альбома
     

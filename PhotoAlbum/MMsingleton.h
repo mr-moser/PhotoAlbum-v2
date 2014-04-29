@@ -13,6 +13,8 @@
 @property (nonatomic, strong) NSMutableArray * arrayAlbom;
 @property (nonatomic, strong) NSMutableArray * arrayImageForAlbum;
 @property (nonatomic, strong) NSMutableArray * arrayImageForAlbumBackground;
+@property (nonatomic, strong) NSString * imageForAlbumBackground;
+@property (nonatomic, strong) NSUserDefaults * userDefaults;
 
 + (MMsingleton *) sharedInstance;
 
