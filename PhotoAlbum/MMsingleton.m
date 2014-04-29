@@ -7,11 +7,10 @@
 //
 
 #import "MMsingleton.h"
-#import "MMalbom.h"
 
 @implementation MMsingleton
 
-@synthesize arrayAlbom, arrayImageForAlbum, arrayImageForAlbumBackground, imageForAlbumBackground, userDefaults;
+@synthesize arrayAlbom, arrayImageForAlbum, arrayImageForAlbumBackground, imageForAlbumBackground, userDefaults, currentAlbom;
 
 //======================================================================================================================
 //Создание объекта mySingleton
@@ -32,6 +31,7 @@ static MMsingleton *sMySingleton = nil;
 - (id) init {
     self = [super init];
     if (self) {
+        currentAlbom = [[NSMutableString alloc] init];
         arrayAlbom = [NSMutableArray array];
         arrayImageForAlbum = [[NSMutableArray alloc] initWithObjects:
                               @"photoalbum-blue.png",

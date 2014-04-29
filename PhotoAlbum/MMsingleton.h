@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMalbom.h"
 
 @interface MMsingleton : NSObject
 
@@ -15,6 +16,8 @@
 @property (nonatomic, strong) NSMutableArray * arrayImageForAlbumBackground;
 @property (nonatomic, strong) NSString * imageForAlbumBackground;
 @property (nonatomic, strong) NSUserDefaults * userDefaults;
+@property (nonatomic, strong) NSMutableString * currentAlbom;
+
 
 + (MMsingleton *) sharedInstance;
 

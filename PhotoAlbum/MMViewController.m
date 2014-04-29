@@ -19,7 +19,6 @@
 @property (nonatomic, assign) NSInteger indexSelectAlbomForCreate;
 @property (nonatomic, assign) NSInteger indexForGridMenu;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *buttonMenu;
-
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 
 - (IBAction)buttonMenuPress:(id)sender;
@@ -156,6 +155,9 @@
 #pragma mark Клик по элементу collectionView - отключение редактирования
 //=============== Клик по элементу collectionView
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSMutableString * srt = [NSMutableString stringWithFormat:@"%@", [[[mySingleton arrayAlbom] objectAtIndex:indexPath.row] albomLabel]];
+    [mySingleton setCurrentAlbom: srt];
+    //NSLog(@"%@", [mySingleton currentAlbom]);
     isEditing = false; //включен ли режим редактирования
     self.butAddAlbom.enabled = true; //включение кнопки добавления альбома
     NSArray * arr = self.collectionView.subviews; //массив всех ячеек в self.collectionView
