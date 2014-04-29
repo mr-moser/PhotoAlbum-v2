@@ -7,8 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RNGridMenu.h"
+#import <QuartzCore/QuartzCore.h>
+#import "MMalbomCell.h"
+#import "MMsingleton.h"
+#import "MMalbom.h"
 
-@interface MMViewController : UIViewController <UICollectionViewDelegateFlowLayout>
+@interface MMViewController : UIViewController <UICollectionViewDelegateFlowLayout, RNGridMenuDelegate>
 
 - (IBAction) showAlertCreateAlbom;
 

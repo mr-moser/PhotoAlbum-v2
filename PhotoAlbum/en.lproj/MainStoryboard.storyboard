@@ -108,8 +108,9 @@
                                     <outlet property="delegate" destination="X7g-9k-ig9" id="tBg-1n-d5O"/>
                                 </connections>
                             </collectionView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="1" translatesAutoresizingMaskIntoConstraints="NO" id="xWw-nu-Q6Q">
-                                <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" defersCurrentPageDisplay="YES" numberOfPages="1" translatesAutoresizingMaskIntoConstraints="NO" id="xWw-nu-Q6Q">
+                                <color key="pageIndicatorTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="currentPageIndicatorTintColor" cocoaTouchSystemColor="darkTextColor"/>
                             </pageControl>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -118,7 +119,7 @@
                             <constraint firstItem="xWw-nu-Q6Q" firstAttribute="leading" secondItem="8dp-zH-qOG" secondAttribute="leading" type="default" id="Jb4-no-OYe"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="trailing" secondItem="8dp-zH-qOG" secondAttribute="trailing" type="default" id="OGV-E5-u0c"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="leading" secondItem="8dp-zH-qOG" secondAttribute="leading" type="default" id="QAh-Np-BRf"/>
-                            <constraint firstItem="xWw-nu-Q6Q" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" constant="721" id="hV5-Hx-13i"/>
+                            <constraint firstItem="xWw-nu-Q6Q" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" constant="673" id="YqM-lR-VGQ"/>
                             <constraint firstItem="6AS-DF-50w" firstAttribute="top" secondItem="8dp-zH-qOG" secondAttribute="top" type="default" id="qAr-uA-6XO"/>
                         </constraints>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>

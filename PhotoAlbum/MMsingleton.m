@@ -33,9 +33,9 @@ static MMsingleton *sMySingleton = nil;
     if (self) {
         arrayAlbom = [NSMutableArray array];
         arrayImageForAlbum = [[NSMutableArray alloc] initWithObjects:
-                              @"photoalbum-red.png",
                               @"photoalbum-blue.png",
                               @"photoalbum-green.png",
+                              @"photoalbum-red.png",
                               @"photoalbum-yellow.png",
                               nil];
     }

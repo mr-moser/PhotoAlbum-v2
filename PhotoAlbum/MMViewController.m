@@ -7,10 +7,6 @@
 //
 
 #import "MMViewController.h"
-#import <QuartzCore/QuartzCore.h>
-#import "MMalbomCell.h"
-#import "MMsingleton.h"
-#import "MMalbom.h"
 
 @interface MMViewController ()
 
@@ -20,12 +16,13 @@
 @property (nonatomic, assign) BOOL isEditing;
 @property (nonatomic, strong) id senderForDeleteAlbom;
 @property (weak, nonatomic) IBOutlet UIBarButtonItem *butAddAlbom;
+@property (nonatomic, assign) NSInteger indexSelectAlbomForCreate;
 
 @end
 
 @implementation MMViewController
 
-@synthesize isEditing, mySingleton;
+@synthesize isEditing, mySingleton, indexSelectAlbomForCreate;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,6 +37,53 @@
     [self.collectionView setPagingEnabled:YES]; //включение постраничной прокрутки
     [self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
 }
+
+#pragma mark Всплывающее окно шаблона альбомов
+//=============== Всплывающее окно шаблона альбомов
+- (void)showGridWithHeaderFromPoint:(CGPoint)point {
+    NSInteger numberOfOptions = 4;
+    NSArray *items = [NSArray arrayWithObjects:
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"photoalbum-blue"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"photoalbum-green"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"photoalbum-red"]],
+                      [[RNGridMenuItem alloc] initWithImage:[UIImage imageNamed:@"photoalbum-yellow"]],
+                      nil];
+    RNGridMenu *av = [[RNGridMenu alloc] initWithItems:[items subarrayWithRange:NSMakeRange(0, numberOfOptions)]];
+    av.delegate = self;
+    av.bounces = YES;
+    av.itemSize = CGSizeMake(400, 300);
+    av.cornerRadius = 10;
+    av.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.3];
+    av.animationDuration = 0.5;
+    
+    UILabel *header = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 0, 44)];
+    header.text = @"Выберите обложку для альбома";
+    header.font = [UIFont boldSystemFontOfSize:18];
+    header.backgroundColor = [UIColor clearColor];
+    header.textColor = [UIColor whiteColor];
+    header.textAlignment = NSTextAlignmentCenter;
+    av.headerView = header;
+    
+    [av showInViewController:self center:point];
+}
+#pragma mark Запрос названия альбома
+//=============== Запрос названия альбома
+- (IBAction) showAlertCreateAlbom {
+    [self showGridWithHeaderFromPoint:CGPointMake(self.view.bounds.size.width/2.f, self.view.bounds.size.height/2.f)];
+}
+- (void)gridMenu:(RNGridMenu *)gridMenu willDismissWithSelectedItem:(RNGridMenuItem *)item atIndex:(NSInteger)itemIndex {
+    indexSelectAlbomForCreate = itemIndex;
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Создание нового альбома" //определение всплывающего окна
+                                                        message:@"Введите название альбома"
+                                                       delegate:self
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Отмена", @"Создать", nil];
+    alertView.alertViewStyle = UIAlertViewStylePlainTextInput; //определение стиля окна
+    [alertView show]; //вывод алерта на экран
+}
+
+
+
 #pragma mark Добавление нового альбома
 //=============== Добавление нового альбома
 - (void) addNewItemInSection { //создание ячейки в self.collectionView
@@ -145,8 +189,8 @@
             UITextField *textField = [alertView textFieldAtIndex:0]; //запись значения из текстового поля алерта
             if (![textField.text isEqualToString:@""]) { //проверка, не пустое ли текстовое поле
                 MMalbom * albom = [[MMalbom alloc] init]; //создаём альбом
-                albom.albomImage = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка обложки
-                albom.albomImageFoto = [[mySingleton arrayImageForAlbum] objectAtIndex:arc4random_uniform(3)]; //картинка фото в обложке
+                albom.albomImage = [[mySingleton arrayImageForAlbum] objectAtIndex:indexSelectAlbomForCreate]; //картинка обложки
+                albom.albomImageFoto = [[mySingleton arrayImageForAlbum] objectAtIndex:indexSelectAlbomForCreate]; //картинка фото в обложке
                 albom.albomLabel = [NSString stringWithFormat:@"%@", textField.text]; //название альбома
                 [[mySingleton arrayAlbom] insertObject:albom atIndex:0]; //запись в массив альбомов в singleton
                 [self addNewItemInSection]; //создание ячейки в self.collectionView
@@ -180,17 +224,6 @@
                                               cancelButtonTitle:nil
                                               otherButtonTitles:@"Ок", nil];
     alertView.alertViewStyle = UIAlertViewStyleDefault; //определение стиля окна
-    [alertView show]; //вывод алерта на экран
-}
-#pragma mark Запрос названия альбома
-//=============== Запрос названия альбома
-- (IBAction) showAlertCreateAlbom {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Создание нового альбома" //определение всплывающего окна
-                                                        message:@"Введите название альбома"
-                                                       delegate:self
-                                              cancelButtonTitle:nil
-                                              otherButtonTitles:@"Отмена", @"Создать", nil];
-    alertView.alertViewStyle = UIAlertViewStylePlainTextInput; //определение стиля окна
     [alertView show]; //вывод алерта на экран
 }
 
