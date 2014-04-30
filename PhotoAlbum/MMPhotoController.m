@@ -38,7 +38,7 @@ enum {
     [super viewDidLoad];
     mySingleton = [MMsingleton sharedInstance]; //создание объекта singleton
     
-    [mySingleton setCurrentTemplate: template_1_ForPhotoView];
+    [mySingleton setCurrentTemplate: template_2_ForPhotoView];
     
     self.backgroundImage.image = [UIImage imageNamed:[mySingleton imageForAlbumBackground]];
     
@@ -72,6 +72,54 @@ enum {
 //=============== Формирование ячейки в collectionView
 - (UICollectionViewCell *)collectionView:(UICollectionView*)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     if ([mySingleton currentTemplate] == template_1_ForPhotoView) {
+        static NSString * cellId = @"Cell1"; //определение идентификатора
+        MMphotoCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath]; //создание ячейки
+        MMphoto * tempPhoto = [[MMphoto alloc] init]; //создание временного альбома
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row]; //запись в этот альбом альбомов из массива
+        cell.photoImage.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        return cell;
+    }
+    else if ([mySingleton currentTemplate] == template_2_ForPhotoView) {
+        static NSString * cellId = @"Cell2"; //определение идентификатора
+        MMphotoCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath]; //создание ячейки
+        MMphoto * tempPhoto = [[MMphoto alloc] init]; //создание временного альбома
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row]; //запись в этот альбом альбомов из массива
+        cell.photoImage.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row + 1]; //запись в этот альбом альбомов из массива
+        cell.photoImage2.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel2.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel2.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        return cell;
+    }
+    else if ([mySingleton currentTemplate] == template_3_ForPhotoView) {
+        static NSString * cellId = @"Cell3"; //определение идентификатора
+        MMphotoCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath]; //создание ячейки
+        MMphoto * tempPhoto = [[MMphoto alloc] init]; //создание временного альбома
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row]; //запись в этот альбом альбомов из массива
+        cell.photoImage.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row + 1]; //запись в этот альбом альбомов из массива
+        cell.photoImage2.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel2.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel2.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        tempPhoto = [[mySingleton arrayPhoto] objectAtIndex:indexPath.row + 2]; //запись в этот альбом альбомов из массива
+        cell.photoImage3.image = [UIImage imageNamed: tempPhoto.photoImage]; // присвоене ячейке картинки альбома
+        cell.photoLabel3.text = tempPhoto.photoLabel; // присвоение ячейке названия альбома
+        cell.photoLabel3.backgroundColor = [UIColor colorWithWhite:0.1 alpha:0.5];
+        
+        return cell;
+    }
+    else if ([mySingleton currentTemplate] == template_4_ForPhotoView) {
         static NSString * cellId = @"Cell4"; //определение идентификатора
         MMphotoCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellId forIndexPath:indexPath]; //создание ячейки
         MMphoto * tempPhoto = [[MMphoto alloc] init]; //создание временного альбома
