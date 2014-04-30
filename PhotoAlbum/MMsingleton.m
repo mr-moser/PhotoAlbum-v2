@@ -10,7 +10,7 @@
 
 @implementation MMsingleton
 
-@synthesize arrayAlbom, arrayImageForAlbum, arrayImageForAlbumBackground, imageForAlbumBackground, userDefaults, currentAlbom;
+@synthesize arrayAlbom, arrayPhoto, arrayImageForAlbum, arrayImageForAlbumBackground, imageForAlbumBackground, userDefaults, currentAlbom, currentTemplate;
 
 //======================================================================================================================
 //Создание объекта mySingleton
@@ -33,6 +33,7 @@ static MMsingleton *sMySingleton = nil;
     if (self) {
         currentAlbom = [[NSMutableString alloc] init];
         arrayAlbom = [NSMutableArray array];
+        arrayPhoto = [NSMutableArray array];
         arrayImageForAlbum = [[NSMutableArray alloc] initWithObjects:
                               @"photoalbum-blue.png",
                               @"photoalbum-green.png",

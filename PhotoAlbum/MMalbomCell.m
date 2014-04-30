@@ -19,7 +19,4 @@
     return self;
 }
 
-- (IBAction)buttonClosePressed:(id)sender {
-}
-
 @end

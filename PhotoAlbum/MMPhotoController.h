@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MMsingleton.h"
+#import "MMphotoCell.h"
+#import "MMphoto.h"
 
 @interface MMPhotoController : UIViewController
 

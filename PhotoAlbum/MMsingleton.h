@@ -12,12 +12,13 @@
 @interface MMsingleton : NSObject
 
 @property (nonatomic, strong) NSMutableArray * arrayAlbom;
+@property (nonatomic, strong) NSMutableArray * arrayPhoto;
 @property (nonatomic, strong) NSMutableArray * arrayImageForAlbum;
 @property (nonatomic, strong) NSMutableArray * arrayImageForAlbumBackground;
 @property (nonatomic, strong) NSString * imageForAlbumBackground;
 @property (nonatomic, strong) NSUserDefaults * userDefaults;
 @property (nonatomic, strong) NSMutableString * currentAlbom;
-
+@property (nonatomic, assign) int currentTemplate;
 
 + (MMsingleton *) sharedInstance;
 

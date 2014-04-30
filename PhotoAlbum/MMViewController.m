@@ -157,7 +157,6 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSMutableString * srt = [NSMutableString stringWithFormat:@"%@", [[[mySingleton arrayAlbom] objectAtIndex:indexPath.row] albomLabel]];
     [mySingleton setCurrentAlbom: srt];
-    //NSLog(@"%@", [mySingleton currentAlbom]);
     isEditing = false; //включен ли режим редактирования
     self.butAddAlbom.enabled = true; //включение кнопки добавления альбома
     NSArray * arr = self.collectionView.subviews; //массив всех ячеек в self.collectionView
