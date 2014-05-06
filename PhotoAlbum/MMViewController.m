@@ -155,8 +155,6 @@
 #pragma mark Клик по элементу collectionView - отключение редактирования
 //=============== Клик по элементу collectionView
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSMutableString * srt = [NSMutableString stringWithFormat:@"%@", [[[mySingleton arrayAlbom] objectAtIndex:indexPath.row] albomLabel]];
-    [mySingleton setCurrentAlbom: srt];
     isEditing = false; //включен ли режим редактирования
     self.butAddAlbom.enabled = true; //включение кнопки добавления альбома
     NSArray * arr = self.collectionView.subviews; //массив всех ячеек в self.collectionView
@@ -164,6 +162,11 @@
         if ([[arr objectAtIndex:i] isKindOfClass:[MMalbomCell class]]) //если ячейки является классом MMalbomCell
             [[[arr objectAtIndex:i] buttonClose] setAlpha:NO]; //скрытие кнопки удаления альбома
     }
+}
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSMutableString * srt = [NSMutableString stringWithFormat:@"%@", [[[mySingleton arrayAlbom] objectAtIndex:indexPath.row] albomLabel]];
+    [mySingleton setCurrentAlbom: srt];
+    return YES;
 }
 #pragma mark Кол-во секций в collectionView
 //=============== Кол-во секций в collectionView

@@ -20,6 +20,8 @@ enum {
 @property (nonatomic, strong) MMsingleton * mySingleton; 
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UINavigationItem *headerNavigationBar;
+@property (weak, nonatomic) IBOutlet UIPageControl *photoPageControl;
 
 @end
 
@@ -34,11 +36,15 @@ enum {
     }
     return self;
 }
+- (void)viewWillAppear:(BOOL)animated {
+    self.headerNavigationBar.title = [mySingleton currentAlbom];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     mySingleton = [MMsingleton sharedInstance]; //создание объекта singleton
     
-    [mySingleton setCurrentTemplate: template_2_ForPhotoView];
+    [mySingleton setCurrentTemplate: template_1_ForPhotoView];
     
     self.backgroundImage.image = [UIImage imageNamed:[mySingleton imageForAlbumBackground]];
     
@@ -56,7 +62,7 @@ enum {
     [flowLayout setMinimumLineSpacing:0]; //расстояние между секциями
     [self.collectionView setCollectionViewLayout:flowLayout]; //запись UICollectionViewFlowLayout в self.collectionView
     [self.collectionView setPagingEnabled:YES]; //включение постраничной прокрутки
-    //[self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
+    [self updateControlPageNumber]; //Обновление кол-ва страниц (точки для прокрутки)
 }
 #pragma mark Кол-во секций в collectionView
 //=============== Кол-во секций в collectionView
@@ -66,7 +72,13 @@ enum {
 #pragma mark Кол-во элементов в collectionView
 //=============== Кол-во элементов в collectionView
 - (NSInteger)collectionView:(UICollectionView*)collectionView numberOfItemsInSection:(NSInteger)section {
-    return [[mySingleton arrayPhoto] count];
+    if ([mySingleton currentTemplate] == template_1_ForPhotoView)
+        return [[mySingleton arrayPhoto] count];
+    if ([mySingleton currentTemplate] == template_2_ForPhotoView || [mySingleton currentTemplate] == template_3_ForPhotoView)
+        return ceil((double)[[mySingleton arrayPhoto] count] / 2);
+    if ([mySingleton currentTemplate] == template_4_ForPhotoView)
+        return ceil((double)[[mySingleton arrayPhoto] count] / 4);
+    return 0;
 }
 #pragma mark Формирование ячейки в collectionView
 //=============== Формирование ячейки в collectionView
@@ -155,9 +167,21 @@ enum {
 //    [cell addGestureRecognizer:longPressGesture]; //привязывание нажатия к ячейке
     return nil;
 }
-
-- (void)viewWillAppear:(BOOL)animated {
-    NSLog(@"%@", [mySingleton currentAlbom]);
+#pragma mark Определение текущей страницы для page controller
+//=============== Определение текущей страницы для page controller
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    //CGFloat pageWidth = self.collectionView.frame.size.width;
+    CGFloat pageWidth = 748;
+    self.photoPageControl.currentPage = self.collectionView.contentOffset.x / pageWidth;
+}
+//=============== Обновление кол-ва страниц для page controller
+- (void)updateControlPageNumber {
+    if ([mySingleton currentTemplate] == template_1_ForPhotoView)
+        self.photoPageControl.numberOfPages = ceil((double)[[mySingleton arrayPhoto] count]); // округление к большему для кол-ва страниц
+    if ([mySingleton currentTemplate] == template_2_ForPhotoView || [mySingleton currentTemplate] == template_3_ForPhotoView)
+        self.photoPageControl.numberOfPages = ceil((double)[[mySingleton arrayPhoto] count] / 2); // округление к большему для кол-ва страниц
+    if ([mySingleton currentTemplate] == template_4_ForPhotoView)
+        self.photoPageControl.numberOfPages = ceil((double)[[mySingleton arrayPhoto] count] / 4); // округление к большему для кол-ва страниц
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
